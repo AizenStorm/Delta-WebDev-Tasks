@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<style>
+	h2{
+		margin-top:1px;
+		margin-bottom:10px;
+		font-family:"Comic Sans MS";
+		
+	}
+	.timer{
+		border:solid black 2px;
+		border-radius:5px;
+		padding:10px;
+		padding-top:5px;
+		margin-top:5px;
+	}
+	ul li{
+		display:inline-block;
+		font-family:"Comic Sans MS";
+		border:solid grey 1px;
+		margin:30px;
+		padding:5px;
+		border-radius:5px;
+		text-align:center;
+	}
+	.ip{
+		border=1px solid grey;
+		border-radius:5px;
+	}
+	.btn{
+		padding:5px;
+		font-size:15px;
+		font-family:"Comic Sans MS";
+	}
+	#user_event{
+		font-family:"Comic Sans MS";
+		padding-left:200px;
+		font-size:25px;
+		font-weight:bold;
+	}
+	#cdt_event{
+		font-family:"Comic Sans MS";
+		padding-left:200px;
+		font-size:25px;
+		font-weight:bold;
+	}
+	
+</style>
+</head>
+<body>
+<!-- Event Palnner -->
+	<div class="timer">
+		<h2>Event Planner</h2>
+		<form>
+			Event:<input type="text" id="event_input" class="ip" placeholder=" Ex: Brother's Birthday"></input><br><br>
+			Day:  <input type="text" id="date_input"  class="ip" placeholder=" YYYY-MM-DD"></input><br><br>
+			Time: <input type="text" id="time_input"  class="ip" placeholder=" hh:mm:ss"></input>
+		</form>
+		<button onclick="userInterval=setInterval(newTimer,1000)" class="btn">Start Countdown</button>
+		<ul>
+			<li id="userdays"></li>
+			<li id="userhours"></li>
+			<li id="userminutes"></li>
+			<li id="userseconds"></li>
+		</ul>
+		<p id="user_event"></p>
+		<button onclick="reset()" class="btn">Reset</button>
+	</div>
+	
+<!-- CountDown Timer -->
+	<div class="timer">
+		<h2> CountDown Timer</h2>
+		<form>
+			Event:	<input type="text" id="cdt_event_input" class="ip" onblur="document.getElementById('cdt_event').innerHTML='To '+document.getElementById('cdt_event_input').value" placeholder=" Ex: Brother's Birthday"></input><br><br>
+			Days:	<input type="text" id="days_input"      class="ip" onblur="days=document.getElementById('days_input').value"></input>
+			Hours:  <input type="text" id="hours_input"     class="ip" onblur="hours=document.getElementById('hours_input').value"></input>
+			Minutes:<input type="text" id="minutes_input"   class="ip" onblur="minutes=document.getElementById('minutes_input').value"></input>
+			Seconds:<input type="text" id="seconds_input"   class="ip" onblur="seconds=document.getElementById('seconds_input').value"></input>
+		</form>
+		<button onclick="cdt=setInterval(decrementor,1000)" class="btn">Start Countdown</button>
+		<ul>
+			<li id="cdtdays"></li>
+			<li id="cdthours"></li>
+			<li id="cdtminutes"></li>
+			<li id="cdtseconds"></li>
+		</ul>
+		<p id="cdt_event"></p>
+		<button onclick="pause()" class="btn">Pause</button>
+		<button onclick="cdt=setInterval(decrementor,1000)" class="btn">Resume</button>
+		<button onclick="cdtreset()" class="btn">Reset</button>
+	</div>
+	<script>
+	//for Event Planner
+	
+		
+		
+		function newTimer()
+		{
+			var userInterval; //global variale for setInterval()
+			var event=document.getElementById("event_input").value;
+			var s=document.getElementById("date_input").value;
+			var t=document.getElementById("time_input").value;
+			var datestring=s + " "+t;
+			var userdate=new Date(datestring);
+			var today=new Date();
+			var y=userdate.getTime()-today.getTime();
+			var diff=new Date(y);
+			var ymonth=diff.getMonth();
+			var yday=diff.getDate()-1;
+			var yhour=diff.getHours()-5;
+			var ymin=diff.getMinutes()-30;
+			var ysec=diff.getSeconds();
+	
+			if(ymonth==1)
+				yday=yday+30;
+			if(ymin<0)
+			{
+				ymin=ymin+60;
+				yhour=yhour-1;
+			}
+			if(yhour<0)
+			{
+				yhour=yhour+24;
+				yday=yday-1;
+			}
+			if(userdate.getTime()<=today.getTime())
+			{
+				document.getElementById("userdays").innerHTML= 0 + "<br>Days";
+				document.getElementById("userhours").innerHTML= 0 + "<br>Hours";
+				document.getElementById("userminutes").innerHTML=0 + "<br>Minutes";
+				document.getElementById("userseconds").innerHTML=0 + "<br>Seconds";
+				document.getElementById("user_event").style.color="red";
+				document.getElementById("user_event").innerHTML="Now is " + event; 
+				today = userdate;
+				clearInterval(userInterval);
+			}
+			else
+			{
+				document.getElementById("userdays").innerHTML= yday + "<br>Days";
+				document.getElementById("userhours").innerHTML= yhour + "<br>Hours";
+				document.getElementById("userminutes").innerHTML=ymin + "<br>Minutes";
+				document.getElementById("userseconds").innerHTML=ysec + "<br>Seconds";
+				document.getElementById("user_event").innerHTML="To " + event; 
+			}
+		}
+		function reset()
+		{
+			document.getElementById("userdays").innerHTML= "";
+			document.getElementById("userhours").innerHTML= "";
+			document.getElementById("userminutes").innerHTML="";
+			document.getElementById("userseconds").innerHTML="";
+			document.getElementById("user_event").innerHTML="";
+			document.getElementById("date_input").value="";
+			document.getElementById("time_input").value="";
+			document.getElementById("event_input").value="";
+			document.getElementById("user_event").style.color="black";
+			clearInterval(userInterval);
+		}
+		
+	//for CountDown Timer(cdt)
+	
+		var cdt; //global variable for setInterval()
+		var days;
+		var hours;
+		var minutes;
+		var seconds;
+		var cdtevt;
+	
+		function decrementor()
+		{
+			if(isNaN(days) || isNaN(hours) || isNaN(minutes) || isNaN(seconds) || days<0 || hours<0 || minutes<0 || seconds<0)
+			{
+				alert("Please enter a positive integer for all fields");
+				cdtreset();
+				
+			 
+			}
+			else
+			{
+				if(days>0)
+				{
+					seconds--;
+					if(seconds<0)
+					{
+						seconds=seconds+60;
+						minutes=minutes-1;
+					}
+					if(minutes<0)
+					{
+						minutes=minutes+60;
+						hours=hours-1;
+					}
+					if(hours<0)
+					{
+						hours=hours+24;
+						days=days-1;
+					}
+				}
+				else if(hours>0)
+				{
+					days=0;
+					seconds--;
+					if(seconds<0)
+					{
+						seconds=seconds+60;
+						minutes=minutes-1;
+					}
+					if(minutes<0)
+					{
+						minutes=minutes+60;
+						hours=hours-1;
+					}
+		
+				}
+				else if(minutes>0)
+				{
+					hours=0;
+					seconds--;
+					if(seconds<0)
+					{
+						seconds=seconds+60;
+						minutes=minutes-1;
+					}
+				}
+				else if(seconds>0)
+				{	
+					minutes=0;
+					seconds--;
+				}
+				else
+				{
+					seconds=0;
+					document.getElementById("cdt_event").style.color="red";
+					document.getElementById("cdt_event").innerHTML="Now is " + document.getElementById("cdt_event_input").value;
+				}
+				document.getElementById("cdtdays").innerHTML= days + "<br>Days";
+				document.getElementById("cdthours").innerHTML= hours + "<br>Hours";
+				document.getElementById("cdtminutes").innerHTML=minutes + "<br>Minutes";
+				document.getElementById("cdtseconds").innerHTML=seconds + "<br>Seconds";
+				
+			}
+		}
+	
+	
+		function cdtreset()
+		{
+			clearInterval(cdt);
+			document.getElementById("cdt_event").innerHTML="";
+			document.getElementById("cdtdays").innerHTML= "";
+			document.getElementById("cdthours").innerHTML= "";
+			document.getElementById("cdtminutes").innerHTML="";
+			document.getElementById("cdtseconds").innerHTML="";
+			document.getElementById("cdt_event_input").value="";
+			document.getElementById("days_input").value="";
+			document.getElementById("hours_input").value="";
+			document.getElementById("minutes_input").value="";
+			document.getElementById("seconds_input").value="";
+			document.getElementById("cdt_event").style.color="black";
+		
+		}
+		function pause()
+		{
+			clearInterval(cdt);
+		}
+	</script>
+</body>
+</html>

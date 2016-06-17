@@ -1,0 +1,79 @@
+<html>
+<head>
+<style>
+table{
+	border: 1px solid black;
+}
+table tr td{
+	border:1px solid black;
+}
+.hidden{
+	visibility: hidden;
+}
+.unhidden{
+	visibility: visible;
+}
+</style>
+</head>
+<body>
+<table>
+	<tr>
+		<td onclick="foo('table11')"><div class="hidden" id="table11">name</div></td>
+		<td onclick="foo('table12')"><div class="hidden" id="table12">age</div></td>
+		<td onclick="foo('table13')"><div class="hidden" id="table13">sex</div></td>
+	</tr>
+	<tr>
+		<td id="tt">name </td>
+		<td id="tt">age</td>
+		<td>sex</td>
+	</tr>
+</table>
+<p id="demo"></p>
+
+<script>
+var item;
+var pre;
+
+var count=0
+var a=0;
+function foo(divid)
+{
+	count++;
+	count=count%2;
+	document.getElementById("demo").innerHTML=count;
+	item=document.getElementById(divid);
+	if(item.className=="hidden")
+	{
+		item.className="unhidden"
+	}
+	else
+	{
+		item.className="hidden"
+	}
+	setTimeout(hider,2000);
+	
+	
+}
+
+function hider()
+{
+	if(pre && count==0)
+	{
+		
+		if(pre.className=='unhidden')
+			pre.className='hidden';
+		if(item.className=='unhidden')
+			item.className='hidden';
+			
+		pre=item;
+	}
+}
+function faa()
+{
+	a++;
+	a%1;
+}
+</script>
+
+</body>
+</html>

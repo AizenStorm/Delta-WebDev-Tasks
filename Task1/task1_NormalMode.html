@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<style>
+	ul{
+		position:relative;
+		padding-left:365px;
+		background-image: url("200.gif");
+		height:200px;
+	}
+	ul li{
+		display:inline-block;
+		font-family:"Comic Sans MS","Arial",sans-serif;
+		border:solid lightgrey 2px;
+		margin:30px;
+		padding:5px;
+		border-radius:5px;
+		text-align:center;
+		background-color:white;
+	}
+
+	#hometxt{
+		text-align:center;
+		font-family:"Comic Sans MS","Arial",sans-serif;
+		font-size:20px;
+		font-weight:bold;
+	}
+	#homeimg{	
+		position:relative;
+		left:530px;
+	}
+</style>
+</head>
+<body onload="setInterval(timer,1000)">
+<!-- CountDown Timer to me reaching home -->
+	<div>
+		<p id="demo"></p>
+		<ul id="hometimer">
+			<li id="days"></li>
+			<li id="hours"></li>
+			<li id="minutes"></li>
+			<li id="seconds"></li>
+		</ul>
+		<p id="hometxt"> TO HOME</p>
+	</div>
+	<script>
+	function timer()
+	{ 
+		var today=new Date();
+		var specialday=new Date(2016,5,2,22,30,0,0);
+		var x=specialday.getTime() - today.getTime();//x is the difference between the dates in milliseconds
+		var diff=new Date(x);						 //diff is a date which is x milliseconds ahead from 01/01/1970 00:00:00
+		var xmonth=diff.getUTCMonth();
+		var xday=diff.getUTCDate();
+		var xhour=diff.getUTCHours();				
+		var xmin=diff.getUTCMinutes();
+		var xsec=diff.getUTCSeconds();
+		if(xmonth==1)
+			xday=xday+31;
+		if(xmin<0)
+		{
+			xmin=xmin+60;
+			xhour=xhour-1;
+		}
+		if(xhour<0)
+		{
+			xhour=xhour+24;
+			xday=xday-1;
+		}
+		
+		if (today >= specialday)
+		{
+			document.getElementById("hometxt").innerHTML="HOME !!!";
+			document.getElementById("hometimer").style.backgroundImage='url("fireworks.gif")';
+			document.getElementById("demo").innerHTML=specialday.getTime() + " "+today.getTime() + " "+x + diff;
+			document.getElementById("days").innerHTML= "";
+			document.getElementById("hours").innerHTML= "";
+			document.getElementById("minutes").innerHTML= "";
+			document.getElementById("seconds").innerHTML= "";
+		}
+		else
+		{
+			document.getElementById("days").innerHTML= xday + "<br>Days";
+			document.getElementById("hours").innerHTML= xhour + "<br>Hours";
+			document.getElementById("minutes").innerHTML=xmin + "<br>Minutes";
+			document.getElementById("seconds").innerHTML=xsec + "<br>Seconds";
+		}
+
+	}
+
+
+	</script>
+</body>
+
+</html>
